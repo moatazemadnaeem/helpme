@@ -17,7 +17,7 @@ const {resend_otp}=require('./routes/UserRoutes/resendOtp')
 const {forgot_password}=require('./routes/UserRoutes/forgotPassword')
 const {reset_password}=require('./routes/UserRoutes/resetPassword')
 const {resend_otp_reset}=require('./routes/UserRoutes/resendOtpReset')
-
+const {verfiy_user}=require('./routes/UserRoutes/verify')
 
 const { handelerr } =require('./middlewares/handelError') 
 const {notfound}=require('./errorclasses/notfound')
@@ -45,6 +45,7 @@ app.use('/api/users',resend_otp)
 app.use('/api/users',forgot_password)
 app.use('/api/users',reset_password)
 app.use('/api/users',resend_otp_reset)
+app.use('/api/users',verfiy_user)
 
 app.all('*',()=>{
     throw new notfound('can not find this page please try again')
