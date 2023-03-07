@@ -30,7 +30,12 @@ app.use(fileUpload({
     createParentPath: true,
 
 }));
-
+app.use(
+    cookieSession({
+        signed:false,
+        maxAge: 30 * 24 * 60 * 60 * 1000
+    })
+)
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded());
