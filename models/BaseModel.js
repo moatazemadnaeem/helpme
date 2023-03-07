@@ -20,7 +20,7 @@ const BaseSchema=mongoose.Schema({
     },
     IsValid:{
         type:Boolean,
-        default:true
+        default:false
     },
     uniqueString:{
         type:String,
