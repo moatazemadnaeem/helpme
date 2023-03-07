@@ -13,10 +13,6 @@ const BaseSchema=mongoose.Schema({
         type:String,
         required:true,
     },
-    mobile:{
-        type:String,
-        required:true,
-    },
     role: { 
         type: String,
         enum:Object.values(roles),

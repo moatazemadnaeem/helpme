@@ -12,39 +12,44 @@ const {roles}=require('../types/roles')
 module.exports={
     signup:async(req,res)=>{
         const {name,email,password,role}=req.body;
-       const exists=await user.findOne({email})
-       if(exists){
-        console.log('user already exists')
-       throw new BadReqErr('Email is already in use')
-       }
-       else{
-            let img=[];
-            if(req.files){
-                if(req.files.img.length===undefined){
-                    img=[req.files.img];
-                }else{
-                    img=[...req.files.img];
-                }
+        try{
+            const exists=await user.findOne({email})
+            if(exists){
+             console.log('user already exists')
+             throw new BadReqErr('Email is already in use')
             }
-        
-           const uniqueString=GetRandString()
-         
-     
-          const User= await user.create({name,email,password:hashPass(password),uniqueString,role})
-        
-          for(let i=0;i<img.length;i++){
-            let item=img[i]
-            const fileFormat = item.mimetype.split('/')[1]
-            const { base64 } = bufferToDataURI(fileFormat, item.data)
-            const imageDetails = await uploadToCloudinary(base64, fileFormat)
-            console.log(imageDetails)
-            User.imgPath.push(imageDetails.url)
-            await User.save()
+            else{
+                 let img=[];
+                 if(req.files){
+                     if(req.files.img.length===undefined){
+                         img=[req.files.img];
+                     }else{
+                         img=[...req.files.img];
+                     }
+                 }
+             
+                const uniqueString=GetRandString()
+              
+          
+               const User= await user.create({name,email,password:hashPass(password),uniqueString,role})
+             
+               for(let i=0;i<img.length;i++){
+                 let item=img[i]
+                 const fileFormat = item.mimetype.split('/')[1]
+                 const { base64 } = bufferToDataURI(fileFormat, item.data)
+                 const imageDetails = await uploadToCloudinary(base64, fileFormat)
+                 console.log(imageDetails)
+                 User.imgPath.push(imageDetails.url)
+                 await User.save()
+             }
+            
+               SendEmail(User.email,User.uniqueString)
+               return res.status(201).send({name:User.name,email:User.email,img:User.imgPath,role:User.role,id:User._id,status:true})
+            } 
+        }catch(err){
+            throw new BadReqErr(err.message)
         }
-       
-          SendEmail(User.email,User.uniqueString)
-          return res.status(201).send({name:User.name,email:User.email,img:User.imgPath,role:User.role,id:User._id,status:true})
-       } 
+     
     },
     signin:async(req,res)=>{
         
