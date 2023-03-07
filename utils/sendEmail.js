@@ -1,26 +1,20 @@
-const nodemailer=require('nodemailer')
-
+import sgMail from '@sendgrid/mail'
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const SendEmail=(email,uniqueString)=>{
-
-    const Transport=nodemailer.createTransport({
-        service:'gmail',
-        auth:{
-            user:'moatazemad772@gmail.com',
-            pass:process.env.NODEMAILERPASS
-        },
-    })
-    const mailOptions={
-        from:'moatazemad772@gmail.com',
-        to:email,
+    const msg = {
+        to: email, 
+        from: 'moatazwork0@gmail.com', 
         subject:'Email confirmation',
-        text:`Type This Code Inside Your App (${uniqueString}) to verify your email. Thanks`
-    }
-    Transport.sendMail(mailOptions,function(err,res){
-        if(err){
-            console.log('Error',err)
-        }else{
-            console.log('Response',res)
-        }
-    })
+        text:`Here is The OTP (${uniqueString}). Thanks`
+      }
+      sgMail
+      .send(msg)
+      .then(() => {
+      console.log('Email sent')
+      })
+      .catch((error) => {
+      console.error(error)
+      })
+   
 }
 module.exports={SendEmail}
