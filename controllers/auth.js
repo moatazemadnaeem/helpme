@@ -11,7 +11,7 @@ const {roles}=require('../types/roles')
 
 module.exports={
     signup:async(req,res)=>{
-        const {name,email,password,role}=req.body;
+        const {name,email,password,role,country,governorate,city,age}=req.body;
         try{
             const exists=await user.findOne({email})
             if(exists){
@@ -31,7 +31,7 @@ module.exports={
                 const uniqueString=GetRandString()
               
           
-               const User= await user.create({name,email,password:hashPass(password),uniqueString,role})
+               const User= await user.create({name,email,password:hashPass(password),uniqueString,role,country,governorate,city,age})
              
                for(let i=0;i<img.length;i++){
                  let item=img[i]
@@ -44,7 +44,7 @@ module.exports={
              }
             
                SendEmail(User.email,User.uniqueString)
-               return res.status(201).send({name:User.name,email:User.email,img:User.imgPath,role:User.role,id:User._id,status:true})
+               return res.status(201).send({name:User.name,email:User.email,img:User.imgPath,role:User.role,id:User._id,country:User.country,city:User.city,governorate:User.governorate,age:User.age,status:true})
             } 
         }catch(err){
             throw new BadReqErr(err.message)
@@ -87,6 +87,10 @@ module.exports={
         status:true,
         id:existingUser._id,
         role:existingUser.role,
+        country:existingUser.country,
+        city:existingUser.city,
+        governorate:existingUser.governorate,
+        age:existingUser.age,
         token
     })
     },
