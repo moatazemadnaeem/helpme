@@ -16,7 +16,8 @@ router.post('/signup',
     body('governorate').isLength({min:3,max:255}).withMessage('governorate must be at least 3 chars long and 255 max'),
     body('city').isLength({min:3,max:255}).withMessage('city must be at least 3 chars long and 255 max'),
     body('age').isNumeric().withMessage('Age must be a number'),
-    body('role').custom(validateRole).withMessage('role must be either developer or client')
+    body('role').custom(validateRole).withMessage('role must be either developer or client'),
+    body('number').isLength({min:11,max:11}).withMessage('number must be 11 chars'),
 ],
 validatereq,
 signup)

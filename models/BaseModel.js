@@ -29,6 +29,10 @@ const BaseSchema=mongoose.Schema({
         type:String,
         required:true,
     },
+    number:{
+        type:String,
+        required:true,
+    },
     role: { 
         type: String,
         enum:Object.values(roles),

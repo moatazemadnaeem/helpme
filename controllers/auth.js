@@ -11,7 +11,7 @@ const {roles}=require('../types/roles')
 
 module.exports={
     signup:async(req,res)=>{
-        const {name,email,password,role,country,governorate,city,age}=req.body;
+        const {name,email,password,role,country,governorate,city,age,number}=req.body;
         try{
             const exists=await user.findOne({email})
             if(exists){
@@ -31,7 +31,7 @@ module.exports={
                 const uniqueString=GetRandString()
               
           
-               const User= await user.create({name,email,password:hashPass(password),uniqueString,role,country,governorate,city,age})
+               const User= await user.create({name,email,password:hashPass(password),uniqueString,role,country,governorate,city,age,number})
              
                for(let i=0;i<img.length;i++){
                  let item=img[i]
@@ -44,7 +44,7 @@ module.exports={
              }
             
                SendEmail(User.email,User.uniqueString)
-               return res.status(201).send({name:User.name,email:User.email,img:User.imgPath,role:User.role,id:User._id,country:User.country,city:User.city,governorate:User.governorate,age:User.age,status:true})
+               return res.status(201).send({name:User.name,email:User.email,img:User.imgPath,role:User.role,id:User._id,country:User.country,city:User.city,governorate:User.governorate,age:User.age,number:User.number,status:true})
             } 
         }catch(err){
             throw new BadReqErr(err.message)
@@ -91,6 +91,7 @@ module.exports={
         city:existingUser.city,
         governorate:existingUser.governorate,
         age:existingUser.age,
+        number:existingUser.number,
         token
     })
     },
@@ -105,7 +106,7 @@ module.exports={
         //check first is the session object exist and then check jwt
         if(req.currentUser){
           try{
-            const {name,email,_id,role,imgPath}= await user.findById(req.currentUser.id)
+            const {name,email,_id,role,imgPath,country,city,governorate,age,number}= await user.findById(req.currentUser.id)
             return res.send({
                 name,
                 email,
@@ -113,6 +114,11 @@ module.exports={
                 status:true,
                 role,
                 images:imgPath,
+                country,
+                governorate,
+                age,
+                number,
+                city
             })
           }catch(err){
             throw new notfound('this user can not be found')
