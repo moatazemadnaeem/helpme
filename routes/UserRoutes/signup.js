@@ -15,8 +15,16 @@ router.post('/signup',
     body('country').isLength({min:3,max:255}).withMessage('country must be at least 3 chars long and 255 max'),
     body('governorate').isLength({min:3,max:255}).withMessage('governorate must be at least 3 chars long and 255 max'),
     body('city').isLength({min:3,max:255}).withMessage('city must be at least 3 chars long and 255 max'),
-    body('age').isNumeric().withMessage('Age must be a number'),
-    body('role').custom(validateRole).withMessage('role must be either developer or client'),
+    body('age').custom((value) => {
+        if(typeof value!=='number'){
+            return Promise.reject('Age must be number');
+        }
+        if (value >= 15 && value <= 90) {
+            return Promise.resolve()
+        }
+        return Promise.reject('Age must be between 15 and 90');
+    }),
+    body('role').custom(validateRole).withMessage('role must be either technical or client'),
     body('number').isLength({min:11,max:11}).withMessage('number must be 11 chars'),
 ],
 validatereq,

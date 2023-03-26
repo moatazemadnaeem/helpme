@@ -53,17 +53,14 @@ const IsAdminFunc = async(req, res, next) => {
   }
     
 };
-const IsSeller = async(req, res, next) => {
+const IsTechnical = async(req, res, next) => {
   try{
     const User=await user.findById(req.currentUser.id)
     if(!User){
       return next(new NotAuth('You are not authenticated')) 
     }
-    if(User.role===roles.ADMIN){
-      return next()
-    }
-    if(User.role!==roles.SELLER){
-      return next(new NotAuth('You are not seller to do this action')) 
+    if(User.role!==roles.Technical){
+      return next(new NotAuth('You are not Technical to do this action')) 
     }
     return next()
   }catch(err){
@@ -71,17 +68,14 @@ const IsSeller = async(req, res, next) => {
   }
     
 };
-const IsUser= async(req, res, next) => {
+const IsClient= async(req, res, next) => {
   try{
     const User=await user.findById(req.currentUser.id)
     if(!User){
       return next(new NotAuth('You are not authenticated')) 
     }
-    if(User.role===roles.ADMIN){
-      return next()
-    }
-    if(User.role!==roles.USER){
-      return next(new NotAuth('You are not user to do this action')) 
+    if(User.role!==roles.Client){
+      return next(new NotAuth('You are not client to do this action')) 
     }
     return next()
   }catch(err){
@@ -90,6 +84,6 @@ const IsUser= async(req, res, next) => {
     
 };
 
-module.exports={Auth,IsAdminFunc,IsSeller,IsUser}
+module.exports={Auth,IsAdminFunc,IsTechnical,IsClient}
 
 
