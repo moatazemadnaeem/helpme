@@ -23,6 +23,8 @@ const {technical_data}=require('./routes/technicalRoutes/technical_data')
 const {edit_certificate}=require('./routes/technicalRoutes/edit_certificate_img')
 const {get_technical_data}=require('./routes/technicalRoutes/getTechnicalData')
 const {edit_technical_data}=require('./routes/technicalRoutes/edit_technical_data')
+const {get_technicals}=require('./routes/technicalRoutes/get_technicals')
+
 
 const { handelerr } =require('./middlewares/handelError') 
 const {notfound}=require('./errorclasses/notfound')
@@ -61,6 +63,7 @@ app.use('/api/technical',technical_data)
 app.use('/api/technical',edit_certificate)
 app.use('/api/technical',get_technical_data)
 app.use('/api/technical',edit_technical_data)
+app.use('/api/technical',get_technicals)
 
 app.all('*',()=>{
     throw new notfound('can not find this page please try again')

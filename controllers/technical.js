@@ -101,4 +101,71 @@ module.exports={
             throw new BadReqErr(err.message)
         }
     },
+    getTechnicals:async(req,res)=>{
+        try {
+            const { job, experience, gender, rangeJob, jobKind, rangeAge,governorate,city,country} = req.body;
+    
+            let query = {};
+            if (job) {
+                query.job = job;
+            }
+            if (experience) {
+                query.experience = experience;
+            }
+            if (gender) {
+                query.gender = gender;
+            }
+            if (rangeJob) {
+                query.rangeJob = rangeJob;
+            }
+            if (jobKind) {
+                query.jobKind = jobKind;
+            }
+            if (rangeAge) {
+                query['user.age'] = { $gte: rangeAge[0], $lte: rangeAge[1] };
+            }
+            if (governorate) {
+                query['user.governorate'] = governorate;
+            }
+            if (city) {
+                query['user.city'] = city;
+            }
+            if (country) {
+                query['user.country'] = country;
+            }
+            const Technicals = await technical.aggregate([
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "technicalId",
+                    foreignField: "_id",
+                    as: "user"
+                  }
+                },
+                { $unwind: "$user" },
+                {
+                  $match: query
+                },
+                {
+                    $project: {
+                    technicalId: 0,
+                    __v: 0,
+                    createdAt: 0,
+                    updatedAt: 0,
+                    "user.password": 0,
+                    "user.createdAt": 0,
+                    "user.updatedAt": 0,
+                    "user.__v": 0,
+                    "user.password": 0,
+                    "user.uniqueString": 0,
+                    "user.IsValid": 0
+                    }
+                }
+              ]);
+
+            res.status(200).send({ success: true, data: Technicals });
+        }catch (err) {
+            throw new BadReqErr(err.message)
+        }
+    }
 }
