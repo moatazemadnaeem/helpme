@@ -8,7 +8,7 @@ const {SendEmail} =require('../utils/sendEmail')
 const {bufferToDataURI}=require('../utils/turnBuffertoDataURI')
 const {uploadToCloudinary}=require('../utils/uploadImg')
 const {roles}=require('../types/roles')
-
+const {technical}=require('../models/TechnicalModel')
 module.exports={
     signup:async(req,res)=>{
         const {name,email,password,role,country,governorate,city,age,number}=req.body;
@@ -106,20 +106,14 @@ module.exports={
         //check first is the session object exist and then check jwt
         if(req.currentUser){
           try{
-            const {name,email,_id,role,imgPath,country,city,governorate,age,number}= await user.findById(req.currentUser.id)
-            return res.send({
-                name,
-                email,
-                id:_id,
-                status:true,
-                role,
-                images:imgPath,
-                country,
-                governorate,
-                age,
-                number,
-                city
-            })
+            const data= await user.findById(req.currentUser.id).select('-password -createdAt -updatedAt -__v -uniqueResetPassStr -uniqueString -IsValid')
+            if(data&&data.role===roles.Technical){
+              const techData= await technical.findOne({technicalId:data._id}).select('-createdAt -updatedAt -__v')
+              if(techData){
+                return res.status(200).send({...data.toObject(),...techData.toObject(),status:true})
+              }
+            }
+            return res.status(200).send({...data.toObject(),status:true})
           }catch(err){
             throw new notfound('this user can not be found')
           }
