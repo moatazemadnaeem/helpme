@@ -24,6 +24,7 @@ const {edit_certificate}=require('./routes/technicalRoutes/edit_certificate_img'
 const {get_technical_data}=require('./routes/technicalRoutes/getTechnicalData')
 const {edit_technical_data}=require('./routes/technicalRoutes/edit_technical_data')
 const {get_technicals}=require('./routes/technicalRoutes/get_technicals')
+const {rate_technical}=require('./routes/technicalRoutes/rate_technical')
 
 
 const { handelerr } =require('./middlewares/handelError') 
@@ -64,6 +65,7 @@ app.use('/api/technical',edit_certificate)
 app.use('/api/technical',get_technical_data)
 app.use('/api/technical',edit_technical_data)
 app.use('/api/technical',get_technicals)
+app.use('/api/technical',rate_technical)
 
 app.all('*',()=>{
     throw new notfound('can not find this page please try again')

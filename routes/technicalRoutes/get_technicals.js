@@ -1,6 +1,6 @@
 const express=require('express')
 const {getTechnicals}=require('../../controllers/technical')
-const {Auth,IsTechnical} =require('../../middlewares/auth')
+const {Auth,IsClient} =require('../../middlewares/auth')
 const {body}=require('express-validator')
 const {validatereq}=require('../../middlewares/validateReq')
 const router=express.Router()
@@ -13,7 +13,7 @@ function validateRangeJob(value) {
 function validateTimePay(value) {
     return ['hour', 'day'].includes(value);
 };
-router.get('/get-technicals',Auth,
+router.get('/get-technicals',Auth,IsClient,
 [
     body('job').optional().notEmpty().withMessage('please provide job'),
     body('experience').optional().notEmpty().withMessage('please provide experience'),
@@ -37,6 +37,12 @@ router.get('/get-technicals',Auth,
         }
         return Promise.reject('Age must be between 15 and 90');
     }),
+    body('stars').optional().custom((value)=>{
+        if(typeof value!=='number'){
+            return Promise.reject('stars must be number')
+        }
+        return Promise.resolve()
+    }).isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5')
 ],
 validatereq,
 getTechnicals)

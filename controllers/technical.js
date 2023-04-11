@@ -103,7 +103,7 @@ module.exports={
     },
     getTechnicals:async(req,res)=>{
         try {
-            const { job, experience, gender, rangeJob, jobKind, rangeAge,governorate,city,country} = req.body;
+            const { job, experience, gender, rangeJob, jobKind, rangeAge,governorate,city,country,stars} = req.body;
     
             let query = {};
             if (job) {
@@ -133,6 +133,9 @@ module.exports={
             if (country) {
                 query['user.country'] = country;
             }
+            if (stars) {
+                query["ratings.avgRating"] = { $exists: true, $eq: stars };
+            }
             const Technicals = await technical.aggregate([
                 {
                   $lookup: {
@@ -161,10 +164,37 @@ module.exports={
                     "user.IsValid": 0
                     }
                 }
-              ]);
+            ]);
 
             res.status(200).send({ success: true, data: Technicals });
         }catch (err) {
+            throw new BadReqErr(err.message)
+        }
+    },
+    rate_technicals:async(req,res)=>{
+        const { stars , technicalId } = req.body;
+        try{
+            const tech=await technical.findById(technicalId)
+            if(!tech){
+                throw new BadReqErr('can not find this technical')
+            }
+            // Check if user already rated
+            const alreadyRated = tech.ratings.rateByUser.find(r => r.userId.toString() === req.currentUser.id);
+            if (alreadyRated) {
+               const newRatings= tech.ratings.rateByUser.filter(r => r.userId.toString() !== req.currentUser.id)
+               newRatings.push({ userId: req.currentUser.id, stars })
+               tech.ratings.rateByUser=newRatings;
+            }else{
+               tech.ratings.rateByUser.push({ userId: req.currentUser.id, stars })
+            }
+            const c= tech.ratings.rateByUser.length;
+            tech.ratings.count=c;
+            const s=tech.ratings.rateByUser.map(r => r.stars)
+            const avg=s.reduce((a, b) => a + b, 0)
+            tech.ratings.avgRating= avg / c;
+            await tech.save();
+            return res.status(200).send({ status: true ,msg:'Rate is done successfully'});
+        }catch(err){
             throw new BadReqErr(err.message)
         }
     }

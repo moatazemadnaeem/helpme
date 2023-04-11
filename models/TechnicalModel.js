@@ -34,6 +34,20 @@ const TechnicalSchema=mongoose.Schema({
     technicalId:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
+    },
+    ratings:{
+        rateByUser:[{
+          userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+          stars: { type: Number, required: true, min: 1, max: 5 }
+        }],
+        avgRating:{
+          type:Number,
+          default:0
+        },
+        count:{
+          type:Number,
+          default:0
+        }
     }
 },
 { timestamps: true })
