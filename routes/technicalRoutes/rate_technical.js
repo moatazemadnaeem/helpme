@@ -4,7 +4,7 @@ const {Auth,IsClient}=require('../../middlewares/auth')
 const {rate_technicals}=require('../../controllers/technical')
 const {body}=require('express-validator')
 const {validatereq}=require('../../middlewares/validateReq')
-router.post('/rate-technicals',Auth,IsClient,
+router.post('/rate-technical',Auth,IsClient,
 [
     body('technicalId').isMongoId().withMessage('technicalId must be a valid MongoDB ObjectId'),
     body('stars').custom((value)=>{
