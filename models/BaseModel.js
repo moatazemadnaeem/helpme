@@ -1,5 +1,6 @@
 const mongoose=require('mongoose')
 const {roles}=require('../types/roles')
+const {Chat}=require('./ChatUtil')
 const BaseSchema=mongoose.Schema({
     name:{
         type:String,
@@ -50,7 +51,10 @@ const BaseSchema=mongoose.Schema({
     },
     uniqueResetPassStr:{
         type:String,
-    }
+    },
+    chats:{
+        type:[Chat]
+    },
 },
 { timestamps: true })
 module.exports={user:mongoose.model('User',BaseSchema)}

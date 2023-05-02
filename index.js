@@ -18,6 +18,12 @@ const {forgot_password}=require('./routes/UserRoutes/forgotPassword')
 const {reset_password}=require('./routes/UserRoutes/resetPassword')
 const {resend_otp_reset}=require('./routes/UserRoutes/resendOtpReset')
 const {verfiy_user}=require('./routes/UserRoutes/verify')
+
+//chat
+const {send_msg}=require('./routes/chatsRoutes/SendMsg')
+const {get_chats_user}=require('./routes/chatsRoutes/GetChatByUser')
+const {get_chats}=require('./routes/chatsRoutes/GetChannels')
+
 //Technical
 const {technical_data}=require('./routes/technicalRoutes/technical_data')
 const {edit_certificate}=require('./routes/technicalRoutes/edit_certificate_img')
@@ -59,6 +65,12 @@ app.use('/api/users',forgot_password)
 app.use('/api/users',reset_password)
 app.use('/api/users',resend_otp_reset)
 app.use('/api/users',verfiy_user)
+
+//chat
+app.use('/api/chat',send_msg)
+app.use('/api/chat',get_chats)
+app.use('/api/chat',get_chats_user)
+
 //technical
 app.use('/api/technical',technical_data)
 app.use('/api/technical',edit_certificate)
