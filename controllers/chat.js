@@ -22,7 +22,7 @@ module.exports={
             receiver.chats.push({msg,sender:id,receiver:receiver._id})
             await sender.save()
             await receiver.save()
-            return res.status(201).send({msg:'Notification Sent Successfully...',status:true})
+            return res.status(201).send({msg:'Message Sent Successfully...',status:true})
 
         }catch(err){
             throw new BadReqErr(err.message)
