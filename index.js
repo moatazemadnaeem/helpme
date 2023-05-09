@@ -32,6 +32,12 @@ const {edit_technical_data}=require('./routes/technicalRoutes/edit_technical_dat
 const {get_technicals}=require('./routes/technicalRoutes/get_technicals')
 const {rate_technical}=require('./routes/technicalRoutes/rate_technical')
 
+//Services
+const {create_service}=require('./routes/servicesRoutes/CreateService')
+const {get_services_by_user}=require('./routes/servicesRoutes/getServicesByUser')
+const {get_services}=require('./routes/servicesRoutes/getAllServices')
+const {edit_service}=require('./routes/servicesRoutes/EditService')
+const {rate_service}=require('./routes/servicesRoutes/rate_service')
 
 const { handelerr } =require('./middlewares/handelError') 
 const {notfound}=require('./errorclasses/notfound')
@@ -78,6 +84,13 @@ app.use('/api/technical',get_technical_data)
 app.use('/api/technical',edit_technical_data)
 app.use('/api/technical',get_technicals)
 app.use('/api/technical',rate_technical)
+
+//Services
+app.use('/api/services',create_service)
+app.use('/api/services',get_services_by_user)
+app.use('/api/services',get_services)
+app.use('/api/services',edit_service)
+app.use('/api/services',rate_service)
 
 app.all('*',()=>{
     throw new notfound('can not find this page please try again')

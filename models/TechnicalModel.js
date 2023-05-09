@@ -33,7 +33,8 @@ const TechnicalSchema=mongoose.Schema({
     },
     technicalId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        required:true
     },
     ratings:{
         rateByUser:[{

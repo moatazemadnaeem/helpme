@@ -96,7 +96,7 @@ module.exports={
             exist.rangeJob=rangeJob?rangeJob:exist.rangeJob;
             exist.jobKind=jobKind?jobKind:exist.jobKind;
             await exist.save()
-            return res.status(201).send({status:true,Technical:exist})
+            return res.status(200).send({status:true,Technical:exist})
         }catch(err){
             throw new BadReqErr(err.message)
         }
