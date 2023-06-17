@@ -239,7 +239,7 @@ module.exports={
         }
         existingUser.set({password:hashPass(newpass)})
         await existingUser.save()
-        return res.status(200).send({msg:'Success Now reset your password',status:true})
+        return res.status(200).send({msg:'Success reseting your password',status:true})
     },
     resendOtpReset:async(req,res)=>{
         const {email}=req.body;
