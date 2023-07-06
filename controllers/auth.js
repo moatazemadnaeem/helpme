@@ -53,10 +53,10 @@ module.exports={
     },
     signin:async(req,res)=>{
         
-    const {email,password}=req.body;
+    const {email,password,role}=req.body;
     //if user exist
 
-    const existingUser=await user.findOne({email})
+    const existingUser=await user.findOne({email,role})
     if(!existingUser){
         throw new BadReqErr('invalid creds can not find user ')
     }
